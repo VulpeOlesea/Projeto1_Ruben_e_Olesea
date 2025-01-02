@@ -19,9 +19,10 @@ print("-"*150)
 
 print(df.describe())
 
-# tratamento de dados
-df['Age'] = df['Age'].fillna(0) # Preencher valores nulos de 'Age' com 0
-df['Cabin'] = df['Cabin'].fillna('N/A') # Preencher valores nulos de 'Cabin' com "N/A"
+print("-"*150)
+
+df['Age'] = df['Age'].fillna(0) # valores nulos de 'Age' com 0
+df['Cabin'] = df['Cabin'].fillna('N/A') #valores nulos de 'Cabin' com "N/A"0.0
 df['Fare'] = df['Fare'].fillna(0) # Preencher valores nulos de 'Fare' com 0
 
 def calcular_milissegundos(idade):
@@ -35,5 +36,20 @@ df['Idade_Milissegundos'] = df['Age'].apply(calcular_milissegundos)
 
 print(df.head())
 
+print("-"*150)
 
+survival_rate_by_sex = df.groupby('Sex')['Survived'].mean().reset_index()
+survival_rate_by_sex['Survival Rate by Age'] = survival_rate_by_sex['Survived'] * 100
+survival_rate_by_sex = survival_rate_by_sex[['Sex', 'Survival Rate by Age']]
+print(survival_rate_by_sex)
+
+print("-"*150)
+
+
+survival_rate_by_class = df.groupby('Pclass')['Survived'].mean().reset_index()
+survival_rate_by_class['Survival Rate by Class'] = (survival_rate_by_class['Survived'] * 100).round(2)
+survival_rate_by_class = survival_rate_by_class[['Pclass', 'Survival Rate by Class']]
+print(survival_rate_by_class)
+
+print("-"*150)
 
