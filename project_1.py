@@ -122,9 +122,9 @@ survivors_by_class_sex = df.groupby(['Pclass', 'Sex'])['Survived'].sum().reset_i
 
 plt.figure(figsize=(6,8))
 sns.barplot(data=survivors_by_class_sex, x='Pclass', y='Survived', hue='Sex')
-plt.title('Distribution of survivors by class and sex')
-plt.xlabel('Class')
-plt.ylabel('Number of survivors')
+plt.title('distribuição de sobreviventes por classe e sexo')
+plt.xlabel('Classe')
+plt.ylabel('Numero de sobreviventes')
 plt.legend(title='Sex')
 plt.show()
 
