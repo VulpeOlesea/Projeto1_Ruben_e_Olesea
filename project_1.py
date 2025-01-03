@@ -29,14 +29,14 @@ df['Age'] = df['Age'].fillna(0) # valores nulos de 'Age' com 0
 df['Cabin'] = df['Cabin'].fillna('N/A') #valores nulos de 'Cabin' com "N/A"0.0
 df['Fare'] = df['Fare'].fillna(0) # Preencher valores nulos de 'Fare' com 0
 
-def calcular_milissegundos(idade):
-    if idade == 0:
+def calculate_milliseconds(age):
+    if age == 0:
         return 0
-    birthday = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc) - datetime.timedelta(days=idade * 365.25)
+    birthday = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc) - datetime.timedelta(days=age * 365.25)
     epoch = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
     return int((birthday - epoch).total_seconds() * 1000)
 
-df['Idade_Milissegundos'] = df['Age'].apply(calcular_milissegundos)
+df['Age_Milliseconds'] = df['Age'].apply(calculate_milliseconds)
 
 print(df.head())
 
@@ -54,6 +54,24 @@ survival_by_class = df.groupby('Pclass')['Survived'].mean().reset_index()
 survival_by_class['Survival Rate by Class'] = (survival_by_class['Survived'] * 100).round(2)
 survival_by_class = survival_by_class[['Pclass', 'Survival Rate by Class']]
 print(survival_by_class)
+
+print("-"*150)
+
+filtered_df_no_null_data = df[df['Age'] > 0].copy()
+
+filtered_df_no_null_data.loc[:, 'Age Group'] = pd.cut(
+    filtered_df_no_null_data['Age'],
+    bins=[0, 18, 65, filtered_df_no_null_data['Age'].max()],
+    labels=['Young', 'Adult', 'Senior'],
+    right=False
+)
+
+survival_by_age_group = filtered_df_no_null_data.groupby('Age Group', observed=False)['Survived'].mean().reset_index()
+survival_by_age_group['Survival Rate'] = (survival_by_age_group['Survived'] * 100).round(2)
+
+survival_by_age_group = survival_by_age_group[['Age Group', 'Survival Rate']]
+
+print(survival_by_age_group)
 
 print("-"*150)
 
@@ -109,7 +127,4 @@ plt.xlabel('Class')
 plt.ylabel('Number of survivors')
 plt.legend(title='Sex')
 plt.show()
-
-# Utilizar gráficos de dispersão (scatter plots) para analisar a correlação
-# entre Age, Fare e Survived
 
