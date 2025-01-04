@@ -43,13 +43,22 @@ df['Fare'] = df['Fare'].fillna(0) # Preencher valores nulos de 'Fare' com 0
 # ---------------------------------------------------------- #
 #
 def calculate_milliseconds(age):
+    """
+    Calcula o número de milissegundos decorridos desde a época Unix (1 de janeiro de 1970)
+    até uma data fornecida.
+
+    Param:
+    - age (int): A idade em anos para calcular a data de nascimento relativa à época Unix.
+    Return:
+    - int: O número de milissegundos decorridos desde 1 de janeiro de 1970 até a data correspondente.
+    """
     if age == 0:
         return 0
     birthday = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc) - datetime.timedelta(days=age * 365.25)
     epoch = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
     return int((birthday - epoch).total_seconds() * 1000)
 
-# Criar uma nova coluna chamada Idade_Milissegundos
+# Criar uma coluna chamada Idade_Milissegundos
 print("# Criar uma nova coluna chamada Idade_Milissegundos #\n")
 df['Age_Milliseconds'] = df['Age'].apply(calculate_milliseconds)
 
@@ -95,7 +104,7 @@ print(survival_by_age_group)
 
 print("-"*150)
 # ---------------------------------------------------------- #
-# (Tabela) Calcular a tarifa média por classe e sexo:
+# Calcular a tarifa média por classe e sexo:
 print("# Calcular a tarifa média por classe e sexo #\n")
 filtered_fare = df[df['Fare'] > 0]
 
@@ -201,7 +210,7 @@ df.to_excel('titanic_milliseconds.xlsx', index=False)
 #         Data base         #
 # ------------------------- #
 
-# Importar e conectar à base de dados SQLite
+#conectar à base de dados SQLite
 conn = sqlite3.connect('titanic.db')
 cursor = conn.cursor()
 
