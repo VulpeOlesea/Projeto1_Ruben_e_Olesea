@@ -122,9 +122,46 @@ survivors_by_class_sex = df.groupby(['Pclass', 'Sex'])['Survived'].sum().reset_i
 
 plt.figure(figsize=(6,8))
 sns.barplot(data=survivors_by_class_sex, x='Pclass', y='Survived', hue='Sex')
-plt.title('distribuição de sobreviventes por classe e sexo')
+plt.title('Distribuição de Sobreviventes por Classe e Sexo')
 plt.xlabel('Classe')
 plt.ylabel('Numero de sobreviventes')
-plt.legend(title='Sex')
+plt.legend(title='Sexo')
 plt.show()
 
+
+plt.figure(figsize=(8,6))
+sns.scatterplot(data=df, x='Age', y='Fare', hue='Survived', palette='muted')
+plt.title('Relação entre Idade e Tarifa')
+plt.xlabel('Idade')
+plt.ylabel('Tarifa')
+plt.legend(title='Sobreviveu')
+plt.show()
+
+sns.pairplot(df[['Age', 'Fare', 'Survived']], hue='Survived', diag_kind='hist', palette='muted')
+plt.show()
+
+# histogramas para visualizar a distribuição de Age,Fare,e Survived
+# Age
+plt.figure(figsize=(8,6))
+sns.histplot(data=df, x='Age', bins=30, kde=True, color='green')
+plt.title('Distribuição de Idade')
+plt.xlabel('Idade')
+plt.ylabel('Quantidade')
+plt.show()
+
+#Fare
+plt.figure(figsize=(8,6))
+sns.histplot(data=df, x='Fare', bins=30, kde=True, color='green')
+plt.title('Distribuição da Tarifa')
+plt.xlabel('Tarifa')
+plt.ylabel('Quantidade')
+plt.show()
+
+#Survived
+plt.figure(figsize=(6,4))
+sns.countplot(data=df, x='Survived', hue='Survived', palette='muted')
+plt.title('Distribuição de Sobreviventes')
+plt.xlabel('Sobreviveu?')
+plt.ylabel('Quantidade')
+plt.xticks([0, 1], ['Não', 'Sim'])
+plt.show()
