@@ -2,11 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
+import sqlite3
 
 df = pd.read_csv('titanic.csv')
 
 # ------------------ #
-# ANALISE            #
+#      ANALISE       #
 # ------------------ #
 
 print(df.head())
@@ -172,3 +173,38 @@ plt.show()
 
 df.to_excel('titanic_milliseconds.xlsx', index=False)
 
+# ------------------------- #
+#         Data base         #
+# ------------------------- #
+
+print("-"*150)
+
+conn = sqlite3.connect('titanic.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS passengers (
+        PassengerId INTEGER PRIMARY KEY,
+        Survived INTEGER,
+        Pclass INTEGER,
+        Name TEXT,
+        Sex TEXT,
+        Age REAL,
+        SibSp INTEGER,
+        Parch INTEGER,
+        Ticket TEXT,
+        Fare REAL,
+        Cabin TEXT,
+        Embarked TEXT,
+        Age_Milliseconds INTEGER
+    )
+''')
+
+df.to_sql('passengers', conn, if_exists='replace', index=False)
+
+cursor.execute('SELECT * FROM passengers LIMIT 5')
+rows = cursor.fetchall()
+for row in rows:
+    print(row)
+
+conn.close()
