@@ -41,7 +41,6 @@ df['Cabin'] = df['Cabin'].fillna('N/A') # Valores nulos de 'Cabin' com "N/A"0.0
 df['Fare'] = df['Fare'].fillna(0) # Preencher valores nulos de 'Fare' com 0
 
 # ---------------------------------------------------------- #
-#
 def calculate_milliseconds(age):
     """
     Calcula o número de milissegundos decorridos desde a época Unix (1 de janeiro de 1970)
@@ -154,6 +153,7 @@ print("-"*150)
 # Por classe e sexo
 survivors_by_class_sex = df.groupby(['Pclass', 'Sex'])['Survived'].sum().reset_index()
 
+# Distribuição de Sobreviventes por Classe e Sexo
 plt.figure(figsize=(6,8))
 sns.barplot(data=survivors_by_class_sex, x='Pclass', y='Survived', hue='Sex')
 plt.title('Distribuição de Sobreviventes por Classe e Sexo')
@@ -162,16 +162,13 @@ plt.ylabel('Numero de sobreviventes')
 plt.legend(title='Sexo')
 plt.show()
 
-
+# Relação entre Idade e Tarifa
 plt.figure(figsize=(8,6))
 sns.scatterplot(data=df, x='Age', y='Fare', hue='Survived', palette='muted')
 plt.title('Relação entre Idade e Tarifa')
 plt.xlabel('Idade')
 plt.ylabel('Tarifa')
 plt.legend(title='Sobreviveu')
-plt.show()
-
-sns.pairplot(df[['Age', 'Fare', 'Survived']], hue='Survived', diag_kind='hist', palette='muted')
 plt.show()
 
 # Histogramas para visualizar a distribuição de Age,Fare,e Survived
@@ -210,7 +207,7 @@ df.to_excel('titanic_milliseconds.xlsx', index=False)
 #         Data base         #
 # ------------------------- #
 
-#conectar à base de dados SQLite
+# Conectar à base de dados SQLite
 conn = sqlite3.connect('titanic.db')
 cursor = conn.cursor()
 
