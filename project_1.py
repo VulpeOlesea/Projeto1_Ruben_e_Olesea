@@ -165,3 +165,10 @@ plt.xlabel('Sobreviveu?')
 plt.ylabel('Quantidade')
 plt.xticks([0, 1], ['Não', 'Sim'])
 plt.show()
+
+# ------------------------- #
+# Exportação dos resultados #
+# ------------------------- #
+
+df.to_excel('titanic_milliseconds.xlsx', index=False)
+
