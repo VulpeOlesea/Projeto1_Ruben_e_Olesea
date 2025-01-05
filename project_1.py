@@ -243,13 +243,13 @@ for row in rows:
 # Fechar a conexão com a base de dados
 conn.close()
 
+print("-"*150)
 # ------------------------- #
 #     Análise Adicional     #
 # ------------------------- #
 
-print("-"*150)
-# calcular taxa de sobrevivência por tamanho da familia
-
+# Calcular taxa de sobrevivência por tamanho da familia
+print("# Calcular taxa de sobrevivência por tamanho da familia #\n")
 df['FamilySize'] = df['SibSp'] + df['Parch']
 
 def categorize_family(size):
@@ -276,12 +276,14 @@ df['FamilyCategory'] = df['FamilySize'].apply(categorize_family)
 survival_rates = df.groupby('FamilyCategory')['Survived'].mean().reset_index()
 
 print(survival_rates)
-print("-"*150)
 
+print("-"*150)
+# ---------------------------------------------------------- #
 # Calcular a taxa de sobrevivência por categoria de cabine
+print("# Calcular a taxa de sobrevivência por categoria de cabine #\n")
 df['Cabin'] = df['Cabin'].replace('N/A', pd.NA) # Substituir 'N/A' por NaN
 
-#categorizar os passageiros com ou sem cabine
+# Categorizar os passageiros com ou sem cabine
 def categorize_cabin(cabin):
     """
     Classifica os passageiros com base na presença de um número de cabine.
@@ -301,9 +303,12 @@ survival_rates_cabin = df.groupby('CabinRegistered')['Survived'].mean().reset_in
 print(survival_rates_cabin)
 
 print("-"*150)
-
+# ---------------------------------------------------------- #
 # Calcular a taxa de sobrevivência por porto de embarque
+print("# Calcular a taxa de sobrevivência por porto de embarque #\n")
 survival_rates_embarked = df.groupby('Embarked')['Survived'].mean().reset_index()
 survival_rates_embarked.columns = ['Porto de Embarque', 'Taxa de Sobrevivência']
 
 print(survival_rates_embarked)
+
+print("-"*150)
