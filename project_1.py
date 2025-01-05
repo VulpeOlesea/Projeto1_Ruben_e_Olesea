@@ -247,3 +247,63 @@ conn.close()
 #     Análise Adicional     #
 # ------------------------- #
 
+print("-"*150)
+# calcular taxa de sobrevivência por tamanho da familia
+
+df['FamilySize'] = df['SibSp'] + df['Parch']
+
+def categorize_family(size):
+    """
+    Categoriza o tamanho da família em três grupos:
+    - 'Apenas 1' para passageiros que estão sozinhos.
+    - 'Pequena Família' para famílias com 1 a 3 membros.
+    - 'Grande Família' para famílias com 4 ou mais membros.
+
+    :param
+    - size (int): O tamanho da família.
+
+    :return
+    - str: A categoria correspondente ao tamanho da família.
+    """
+    if size == 0:
+        return 'Apenas 1'
+    elif 1 <= size <= 3:
+        return 'Pequena Família'
+    else:
+        return 'Grande Família'
+
+df['FamilyCategory'] = df['FamilySize'].apply(categorize_family)
+survival_rates = df.groupby('FamilyCategory')['Survived'].mean().reset_index()
+
+print(survival_rates)
+print("-"*150)
+
+# Calcular a taxa de sobrevivência por categoria de cabine
+df['Cabin'] = df['Cabin'].replace('N/A', pd.NA) # Substituir 'N/A' por NaN
+
+#categorizar os passageiros com ou sem cabine
+def categorize_cabin(cabin):
+    """
+    Classifica os passageiros com base na presença de um número de cabine.
+
+    :param cabin: Valor da coluna 'Cabin', que pode ser uma string (número da cabine) ou NaN.
+    :return: Retorna 'Com Cabine' se o passageiro tiver um número de cabine registrado,
+             caso contrário, retorna 'Sem Cabine'.
+    """
+    if pd.notna(cabin):
+        return 'Com Cabine'
+    else:
+        return 'Sem Cabine'
+
+df['CabinRegistered'] = df['Cabin'].apply(categorize_cabin)
+survival_rates_cabin = df.groupby('CabinRegistered')['Survived'].mean().reset_index()
+
+print(survival_rates_cabin)
+
+print("-"*150)
+
+# Calcular a taxa de sobrevivência por porto de embarque
+survival_rates_embarked = df.groupby('Embarked')['Survived'].mean().reset_index()
+survival_rates_embarked.columns = ['Porto de Embarque', 'Taxa de Sobrevivência']
+
+print(survival_rates_embarked)
